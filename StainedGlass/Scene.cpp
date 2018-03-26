@@ -60,7 +60,9 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 	m_spCamera = std::make_unique<Camera>(aspectRatio, CameraScaleFactor,
 		openGlInfo.FieldOfView, openGlInfo.FrustumNear, openGlInfo.FrustumFar);
 
-	m_spCamera->rotateX(25.0f);
+	//m_spCamera->scale(0.05f);
+	//m_spCamera->translateZ(-20.0f);
+	//m_spCamera->rotateX(25.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -160,7 +162,8 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 		SOIL_free_image_data(pBuff);
 	};
 
-	std::string filePath = "data//Moorish_design.png";
+	std::string filePath = "data//test.png";
+	//std::string filePath = "data//Moorish_design.png";
 
 	std::unique_ptr<unsigned char[], decltype(del)> spData(
 		SOIL_load_image(filePath.c_str(), &width, &height, 0, SOIL_LOAD_RGB));
@@ -189,14 +192,22 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 	glm::vec3 specular(0.25f, 0.25f, 0.25f);
 	glm::vec4 lightPos(0.0f, 5.0f, 0.0f, 0.0f);
 
+#if 1
+	// Create texture projector.
+	m_spTextureProjector = std::make_unique<TextureProjector>(m_spProgram->getProgram());
+#else
 	// "Texture projector" properties.
-	glm::vec3 projPos(2.0f, 5.0f, 5.0f);
-	glm::vec3 projAt(-2.0f, -4.0f, 0.0f);
+	glm::vec3 projPos(-15.0f, 5.0f, -7.5f);
+	//glm::vec3 projPos(2.0f, 5.0f, 5.0f);
+	glm::vec3 projAt(15.0f, 5.0f, -7.5f);
+	//glm::vec3 projAt(-2.0f, -4.0f, 0.0f);
 	glm::vec3 projUp(0.0f, 1.0f, 0.0f);
 	glm::mat4 projView = glm::lookAt(projPos, projAt, projUp);
 	glm::mat4 projProj = glm::perspective(30.0f, 1.0f, 0.2f, 1000.0f);
-	glm::mat4 projScaleTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.3f));
+	glm::mat4 projScaleTrans = glm::mat4(1.0f);
+	//glm::mat4 projScaleTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.3f));
 	glm::mat4 texProjectorMatrix = projScaleTrans * projProj * projView;
+#endif
 
 	GLuint program = m_spProgram->getProgram();
 
@@ -254,8 +265,10 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 		glUniform4fv(ltPosition, 1, glm::value_ptr(lightPos));
 	}
 
+#if 0
 	// Texture projector matrix.
 	glUniformMatrix4fv(6, 1, GL_FALSE, glm::value_ptr(texProjectorMatrix));
+#endif
 
 	// Stained glass texture sampler.
 	GLuint texSampler = glGetUniformLocation(program, "glassTexture");
@@ -283,8 +296,6 @@ void Scene::updateViewMatrices() const
 
 	glUseProgram(m_spProgram->getProgram());
 
-	// TODO: update the texture projector parameters.
-
 	// Plane.
 #if 1
 	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(m_spCamera->getModelViewProjectionMatrix()));
@@ -300,11 +311,11 @@ void Scene::updateViewMatrices() const
 
 	glUniformMatrix3fv(3, 1, GL_FALSE, glm::value_ptr(normal));
 
-	glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(m_spCamera->getProjectionMatrix()));
+	//glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(m_spCamera->getProjectionMatrix()));
 
-	glm::vec3 cameraPos = m_spCamera->getTranslation();
+	//glm::vec3 cameraPos = m_spCamera->getTranslation();
 
-	glUniform3fv(5, 1, glm::value_ptr(cameraPos));
+	//glUniform3fv(5, 1, glm::value_ptr(cameraPos));
 #endif
 
 	glUseProgram(0);
@@ -313,6 +324,7 @@ void Scene::updateViewMatrices() const
 void Scene::translateCameraX(GLfloat diff)
 {
 	m_spCamera->translateX(diff);
+	m_spTextureProjector->translateX(diff);
 
 	updateViewMatrices();
 }
@@ -320,6 +332,7 @@ void Scene::translateCameraX(GLfloat diff)
 void Scene::translateCameraY(GLfloat diff)
 {
 	m_spCamera->translateY(diff);
+	m_spTextureProjector->translateY(diff);
 
 	updateViewMatrices();
 }
@@ -327,6 +340,7 @@ void Scene::translateCameraY(GLfloat diff)
 void Scene::translateCameraZ(GLfloat diff)
 {
 	m_spCamera->translateZ(diff);
+	m_spTextureProjector->translateZ(diff);
 
 	updateViewMatrices();
 }
@@ -367,6 +381,7 @@ GLfloat Scene::getCameraScale() const
 void Scene::scaleCamera(GLfloat amount)
 {
 	m_spCamera->scale(amount);
+	m_spTextureProjector->scale(amount);
 
 	updateViewMatrices();
 }

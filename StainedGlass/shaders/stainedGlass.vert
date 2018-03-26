@@ -10,10 +10,9 @@ layout(location = 0) uniform mat4 MVP;
 layout(location = 1) uniform mat4 Model;
 layout(location = 2) uniform mat4 ModelView;
 layout(location = 3) uniform mat3 Normal;
-layout(location = 4) uniform mat4 Projection;
-
-layout(location = 5) uniform vec3 WorldCameraPosition;
-layout(location = 6) uniform mat4 ProjectorMatrix;
+//layout(location = 4) uniform mat4 Projection;
+//layout(location = 5) uniform vec3 WorldCameraPosition;
+layout(location = 4) uniform mat4 ProjectorMatrix;
 
 out vec3 vPos;
 out vec3 vNormal;

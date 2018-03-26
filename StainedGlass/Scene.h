@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TextureProjector.h"
+
 
 namespace StainedGlassApp
 {
@@ -63,5 +65,7 @@ namespace StainedGlassApp
 
 		// Projected texture;
 		GLuint m_textureGlass;
+
+		std::unique_ptr<TextureProjector> m_spTextureProjector;
 	};
 }
