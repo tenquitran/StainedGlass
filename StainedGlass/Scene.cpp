@@ -60,7 +60,7 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 	m_spCamera = std::make_unique<Camera>(aspectRatio, CameraScaleFactor,
 		openGlInfo.FieldOfView, openGlInfo.FrustumNear, openGlInfo.FrustumFar);
 
-	m_spCamera->translateZ(-20.0f);
+	//m_spCamera->translateZ(70.0f);    // closer to the end of the tunnel
 	//m_spCamera->scale(0.05f);
 	//m_spCamera->translateZ(-20.0f);
 	//m_spCamera->rotateX(25.0f);
@@ -198,7 +198,8 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 	};
 
 	//std::string filePath = "data//test.png";
-	std::string filePath = "data//Moorish_design.png";
+	std::string filePath = "data//Moorish_design_long.png";
+	//std::string filePath = "data//Moorish_design.png";
 
 	std::unique_ptr<unsigned char[], decltype(del)> spData(
 		SOIL_load_image(filePath.c_str(), &width, &height, 0, SOIL_LOAD_RGB));

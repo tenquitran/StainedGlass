@@ -66,7 +66,11 @@ void TextureProjector::updateMatrix() const
 {
 	static const glm::mat4 view = glm::lookAt(m_position, m_lookAt, m_upVector);
 
-	static const glm::mat4 projection = glm::perspective(glm::radians(30.0f), 1.0f, 0.2f, 1000.0f);
+	//(	T const & 	left,T const & 	right,T const & 	bottom,T const & 	top, T const & 	zNear, T const & 	zFar)
+
+	static const glm::mat4 projection = glm::ortho(3.0f, -97.0f, -4.5f, 4.3f, 0.2f, 1000.0f);
+	//static const glm::mat4 projection = glm::ortho(0.0f, -100.0f, -3.0f, 7.0f, 0.2f, 1000.0f);
+	//static const glm::mat4 projection = glm::perspective(glm::radians(30.0f), 1.0f, 0.2f, 1000.0f);
 
 	glm::mat4 bias = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * 
 					 glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));

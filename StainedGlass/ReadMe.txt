@@ -12,7 +12,7 @@ Created: March 22, 2018
 
 /////////////////////
 TODO:
-- use the actual model
+- experiment with mipmap levels
 - HDR
 - bloom
 - bump mapping for the floor would be good
