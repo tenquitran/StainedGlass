@@ -3,11 +3,11 @@
 
 namespace StainedGlassApp
 {
-	// Entity to project texture to the scene.
+	// Entity to project texture on the scene.
 	class TextureProjector
 	{
 	public:
-		explicit TextureProjector(GLuint program);
+		TextureProjector(GLuint program, const CommonLibOgl::Camera& camera);
 
 		virtual ~TextureProjector();
 
@@ -26,18 +26,15 @@ namespace StainedGlassApp
 	private:
 		const GLuint m_program;
 
+		const CommonLibOgl::Camera& m_camera;
+
 		const glm::vec3 m_position;
 		
-		const glm::vec3 m_direction;
+		const glm::vec3 m_lookAt;
 		
 		const glm::vec3 m_upVector;
 
 		glm::vec3 m_translation;
-
-#if 0
-		// Initial scale factor.
-		const GLfloat ScaleFactorInit;
-#endif
 
 		// Minimum scale factor.
 		const GLfloat ScaleFactorMin;

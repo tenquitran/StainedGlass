@@ -60,6 +60,7 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 	m_spCamera = std::make_unique<Camera>(aspectRatio, CameraScaleFactor,
 		openGlInfo.FieldOfView, openGlInfo.FrustumNear, openGlInfo.FrustumFar);
 
+	m_spCamera->translateZ(-20.0f);
 	//m_spCamera->scale(0.05f);
 	//m_spCamera->translateZ(-20.0f);
 	//m_spCamera->rotateX(25.0f);
@@ -88,8 +89,8 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 	// Set up the vertex buffer.
 
 	float vertices[] = {
-		-15.0f, -4.0f, 0.0f,
-		 15.0f, -4.0f, 0.0f,
+		-15.0f, -4.0f,   0.0f,
+		 15.0f, -4.0f,   0.0f,
 		-15.0f, -4.0f, -15.0f,
 		 15.0f, -4.0f, -15.0f };
 
@@ -162,8 +163,8 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 		SOIL_free_image_data(pBuff);
 	};
 
-	std::string filePath = "data//test.png";
-	//std::string filePath = "data//Moorish_design.png";
+	//std::string filePath = "data//test.png";
+	std::string filePath = "data//Moorish_design.png";
 
 	std::unique_ptr<unsigned char[], decltype(del)> spData(
 		SOIL_load_image(filePath.c_str(), &width, &height, 0, SOIL_LOAD_RGB));
@@ -194,7 +195,7 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 
 #if 1
 	// Create texture projector.
-	m_spTextureProjector = std::make_unique<TextureProjector>(m_spProgram->getProgram());
+	m_spTextureProjector = std::make_unique<TextureProjector>(m_spProgram->getProgram(), *m_spCamera);
 #else
 	// "Texture projector" properties.
 	glm::vec3 projPos(-15.0f, 5.0f, -7.5f);
@@ -241,11 +242,13 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 
 	// Set light properties.
 
+#if 1
 	GLuint ltAmbient = glGetUniformLocation(program, "Light.ambient");
 	if (-1 != ltAmbient)
 	{
 		glUniform3fv(ltAmbient, 1, glm::value_ptr(ambient));
 	}
+#endif
 
 	GLuint ltDiffuse = glGetUniformLocation(program, "Light.diffuse");
 	if (-1 != ltDiffuse)
@@ -408,7 +411,12 @@ void Scene::render() const
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboPlane);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexPlane);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_textureGlass);
+
 	glDrawElements(GL_TRIANGLES, m_indexCountPlane, GL_UNSIGNED_INT, 0);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

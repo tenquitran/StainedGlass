@@ -29,7 +29,9 @@ void main()
 
 	eyeNormal = normalize(Normal * normal);
     eyePosition = ModelView * position;
-    projTexCoord = ProjectorMatrix * (Model * position);
+
+    projTexCoord = ProjectorMatrix * position;
+    //projTexCoord = ProjectorMatrix * (Model * position);
 
 	gl_Position = MVP * position;
 }

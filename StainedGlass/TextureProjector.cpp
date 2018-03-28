@@ -9,9 +9,11 @@ using namespace StainedGlassApp;
 //////////////////////////////////////////////////////////////////////////
 
 
-TextureProjector::TextureProjector(GLuint program)
-	: m_program(program), m_position(-15.0f, 5.0f, -7.5f), m_direction(15.0f, 5.0f, -7.5f), 
-	  m_upVector(0.0f, 1.0f, 0.0f), /*ScaleFactorInit(1.0f),*/ ScaleFactorMin(0.01f), m_scaleFactor(1.0f)
+TextureProjector::TextureProjector(GLuint program, const Camera& camera)
+	: m_program(program), m_camera(camera), m_position(/*-25.0f, 5.0f, -7.5f*/ -15.0f, 5.0f, -7.5f /*0.0f, 5.0f, 0.0f // ceiling */),
+	m_lookAt(/*0.0f, -4.0f, -12.5f*/ /*15.0f, -4.0f, -12.5f*/  0.0f, -4.0f, -7.5f /* 0.0f, -1.0f, 0.0f // ceiling  */),
+	m_upVector(0.0f, 1.0f, 0.0f  /*0.0f, 0.0f, 1.0f // ceiling  */), 
+	ScaleFactorMin(0.01f), m_scaleFactor(1.0f)
 {
 	if (0 == m_program)
 	{
@@ -62,36 +64,14 @@ void TextureProjector::scale(GLfloat amount)
 
 void TextureProjector::updateMatrix() const
 {
-#if 0
-	glm::vec3 projPos(-15.0f, 5.0f, -7.5f);
-	//glm::vec3 projPos(2.0f, 5.0f, 5.0f);
-	glm::vec3 projAt(15.0f, 5.0f, -7.5f);
-	//glm::vec3 projAt(-2.0f, -4.0f, 0.0f);
-	glm::vec3 projUp(0.0f, 1.0f, 0.0f);
-	glm::mat4 projView = glm::lookAt(projPos, projAt, projUp);
-	glm::mat4 projProj = glm::perspective(30.0f, 1.0f, 0.2f, 1000.0f);
-	glm::mat4 projScaleTrans = glm::mat4(1.0f);
-	//glm::mat4 projScaleTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.3f));
-	glm::mat4 texProjectorMatrix = projScaleTrans * projProj * projView;
-#endif
+	static const glm::mat4 view = glm::lookAt(m_position, m_lookAt, m_upVector);
 
-	static const glm::mat4 view = glm::lookAt(m_position, m_direction, m_upVector);
+	static const glm::mat4 projection = glm::perspective(glm::radians(30.0f), 1.0f, 0.2f, 1000.0f);
 
-	static const glm::mat4 proj = glm::perspective(30.0f, 1.0f, 0.2f, 1000.0f);
+	glm::mat4 bias = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * 
+					 glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 
-	glm::mat4 scaleTranslate = glm::translate(glm::mat4(1.0f), m_translation) * 
-		//glm::scale(glm::mat4(1.0f), glm::vec3(ScaleFactorInit)) *
-		glm::scale(glm::mat4(1.0f), glm::vec3(m_scaleFactor));
-
-#if 0
-	// Apply the initial scale factor.
-	m_model *= glm::scale(glm::mat4(1.0f), glm::vec3(SCALE_FACTOR_INITIAL, SCALE_FACTOR_INITIAL, SCALE_FACTOR_INITIAL));
-
-	// Apply the user-defined scale factor.
-	m_model *= glm::scale(glm::mat4(1.0f), glm::vec3(m_scaleFactorVariable, m_scaleFactorVariable, m_scaleFactorVariable));
-#endif
-
-	glm::mat4 texProjectorMatrix = scaleTranslate * proj * view;
+	glm::mat4 texProjectorMatrix = bias * projection * view * glm::inverse(m_camera.getViewMatrix());
 
 	glUseProgram(m_program);
 

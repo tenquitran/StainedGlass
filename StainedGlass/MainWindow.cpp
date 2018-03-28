@@ -62,10 +62,10 @@ LRESULT MainWindow::windowProcDerived(HWND hWnd, UINT message, WPARAM wParam, LP
 				m_scene.translateCameraY(-0.1f);
 				break;
 			case 0x41:    // A key
-				m_scene.translateCameraX(-0.1f);
+				m_scene.translateCameraX(-0.5f);
 				break;
 			case 0x44:    // D key
-				m_scene.translateCameraX(0.1f);
+				m_scene.translateCameraX(0.5f);
 				break;
 			//////////////////////////////////////////////////////////////////////////
 			// Rotate the camera.
@@ -86,10 +86,10 @@ LRESULT MainWindow::windowProcDerived(HWND hWnd, UINT message, WPARAM wParam, LP
 			// Zoom in/out for the camera.
 			//////////////////////////////////////////////////////////////////////////
 			case VK_NUMPAD0:
-				m_scene.scaleCamera(-0.05f);
+				m_scene.scaleCamera(-0.01f);
 				break;
 			case VK_NUMPAD1:
-				m_scene.scaleCamera(0.05f);
+				m_scene.scaleCamera(0.01f);
 				break;
 			}
 		}

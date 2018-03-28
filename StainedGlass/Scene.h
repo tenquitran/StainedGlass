@@ -66,6 +66,8 @@ namespace StainedGlassApp
 		// Projected texture;
 		GLuint m_textureGlass;
 
+#if 1
 		std::unique_ptr<TextureProjector> m_spTextureProjector;
+#endif
 	};
 }

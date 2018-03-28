@@ -9,3 +9,10 @@ Resources:
 	Moorish_design.png (Original: https://commons.wikimedia.org/wiki/File:Moorish_design_based_on_8_point_geometry.jpg)
 
 Created: March 22, 2018
+
+/////////////////////
+TODO:
+- use the actual model
+- HDR
+- bloom
+- bump mapping for the floor would be good
