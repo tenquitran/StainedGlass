@@ -86,10 +86,10 @@ LRESULT MainWindow::windowProcDerived(HWND hWnd, UINT message, WPARAM wParam, LP
 			// Zoom in/out for the camera.
 			//////////////////////////////////////////////////////////////////////////
 			case VK_NUMPAD0:
-				m_scene.scaleCamera(-0.01f);
+				m_scene.scaleCamera(-0.1f);
 				break;
 			case VK_NUMPAD1:
-				m_scene.scaleCamera(0.01f);
+				m_scene.scaleCamera(0.1f);
 				break;
 			}
 		}

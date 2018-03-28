@@ -10,8 +10,8 @@ using namespace StainedGlassApp;
 
 
 TextureProjector::TextureProjector(GLuint program, const Camera& camera)
-	: m_program(program), m_camera(camera), m_position(/*-25.0f, 5.0f, -7.5f*/ -15.0f, 5.0f, -7.5f /*0.0f, 5.0f, 0.0f // ceiling */),
-	m_lookAt(/*0.0f, -4.0f, -12.5f*/ /*15.0f, -4.0f, -12.5f*/  0.0f, -4.0f, -7.5f /* 0.0f, -1.0f, 0.0f // ceiling  */),
+	: m_program(program), m_camera(camera), m_position(/*-25.0f, 5.0f, -7.5f*/ -15.0f, 5.0f, 0.0f /*0.0f, 5.0f, 0.0f // ceiling */),
+	m_lookAt(/*0.0f, -4.0f, -12.5f*/ /*15.0f, -4.0f, -12.5f*/  0.0f, -4.0f, 0.0f /* 0.0f, -1.0f, 0.0f // ceiling  */),
 	m_upVector(0.0f, 1.0f, 0.0f  /*0.0f, 0.0f, 1.0f // ceiling  */), 
 	ScaleFactorMin(0.01f), m_scaleFactor(1.0f)
 {

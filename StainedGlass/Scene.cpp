@@ -89,10 +89,29 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 	// Set up the vertex buffer.
 
 	float vertices[] = {
-		-15.0f, -4.0f,   0.0f,
-		 15.0f, -4.0f,   0.0f,
-		-15.0f, -4.0f, -15.0f,
-		 15.0f, -4.0f, -15.0f };
+
+#if 1
+		// Floor
+		-10.0f, -3.0f, 0.0f,
+		10.0f, -3.0f, 0.0f,
+		-10.0f, -3.0f, -100.0f,
+		10.0f, -3.0f, -100.0f,
+
+		// Left wall (the texture projector side); height is 3+7=10
+		-10.0f, 7.0f, 0.0f,
+		-10.0f, 7.0f, -100.0f,
+
+		// Right wall
+		10.0f, 7.0f, 0.0f,
+		10.0f, 7.0f, -100.0f,
+
+#else
+		-15.0f, -4.0f,  7.5f,
+		 15.0f, -4.0f,  7.5f,
+		-15.0f, -4.0f, -7.5f,
+		 15.0f, -4.0f, -7.5f 
+#endif
+	};
 
 	glGenBuffers(1, &m_vboPlane);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboPlane);
@@ -107,8 +126,23 @@ bool Scene::initialize(GLfloat aspectRatio, const OpenGLInfo& openGlInfo)
 	// Set up the index buffer.
 
 	GLuint indices[] = {
+
+		// Floor
 		0, 1, 3,
-		0, 3, 2 };
+		0, 3, 2,
+
+		// Left wall (the texture projector side)
+		0, 2, 5,
+		0, 5, 4,
+
+		// Right wall
+		1, 6, 7,
+		1, 7, 3,
+
+		// Ceiling
+		4, 7, 6,
+		4, 5, 7
+	};
 
 	m_indexCountPlane = _countof(indices);
 
